@@ -1,0 +1,44 @@
+{
+    "name": "flogo-jwt-extension",
+    "version": "1.0.0",
+    "author": "Justin Mirfield",
+    "type": "flogo:activity",
+    "title": "JWT Signing",
+    "description": "Tool to Create (sign) a JWT",
+    "inputs": [
+        {
+            "name": "header",
+            "type": "string"
+        },
+        {
+            "name": "payload",
+            "type": "string"
+        },
+        {
+            "name": "secret",
+            "type": "string"
+        },
+        {
+            "name": "mode",
+            "required": true,
+            "type": "string",
+            "display": {
+                "type": "dropdown",
+                "selection": "single"
+            },
+            "allowed": [
+                "Sign"
+            ]
+        },
+        {
+            "name": "algorithm",
+            "type": "string"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "token",
+            "type": "string"
+        }
+    ]
+}
