@@ -1,5 +1,5 @@
 {
-    "name": "flogo-jwt-extension",
+    "name": "jwt",
     "version": "1.0.0",
     "author": "Justin Mirfield",
     "type": "flogo:activity",
