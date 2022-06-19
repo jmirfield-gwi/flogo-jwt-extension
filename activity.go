@@ -2,7 +2,8 @@ package jwt
 
 import (
 	"github.com/project-flogo/core/activity"
-	"fmt"
+	"github.com/golang-jwt/jwt/v4"
+	"encoding/json"
 )
 
 func init() {
@@ -29,17 +30,14 @@ func (a *Activity) Metadata() *activity.Metadata {
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	input := &Input{}
-
+	output := &Output{}
 	err = ctx.GetInputObject(input)
+
 	if err != nil {
 		return false, err
 	}
 
-	fmt.Println(input)
-
 	sharedEncryptionKey := []byte(input.Secret)
-
-	fmt.Println(sharedEncryptionKey)
 
 	if err != nil {
 		return true, err
@@ -49,8 +47,62 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	
 	case "Sign":
 		{
-			fmt.Println(input.Mode)
+			claims := jwt.MapClaims{}
+			var header map[string]interface{}
+
+			// take the payload (claims) string and unmarshall it into a byte slice
+			if err := json.Unmarshal([]byte(input.Payload), &claims); err != nil {
+				ctx.Logger().Info("Invalid Payload: ", err)
+				return false, err
+			}
+
+			// Take the header string and unmarshall
+			if err := json.Unmarshal([]byte(input.Header), &header); err != nil {
+				ctx.Logger().Info("Invalid Header: ", err)
+				return false, err
+			}
+
+			// get the alg value from the header
+			alg := header["alg"].(string)
+
+			// if the header and the passed algo method the same
+			if input.Algorithm != alg {
+				ctx.Logger().Info("Header algo doesn't match algorithm parm")
+				return false, nil
+			}
+
+			// use the alg name to get the signing method
+			signwith := jwt.GetSigningMethod(alg)
+
+			token := jwt.NewWithClaims(signwith, claims)
+
+			var key interface{}
+
+			//  Depending on the algorithm type we need to convert  the format of the private string
+			key, err = jwt.ParseRSAPrivateKeyFromPEM(sharedEncryptionKey)
+				if err != nil {
+					ctx.Logger().Info("Bad RSA key", err)
+					return false, err
+				}
+
+			// Sign and get the complete encoded token as a string using the secret
+			tokenString, err := token.SignedString(key)
+
+			if err == nil {
+				ctx.Logger().Debug("Token String created", tokenString)
+				output.Token = tokenString
+				ctx.SetOutputObject(output)
+				return true, nil
+			} else {
+				ctx.Logger().Info("Signing error: ", err)
+				return false, err
+			}
 		}
+	}
+
+	err = ctx.SetOutputObject(output)
+	if err != nil {
+		return false, err
 	}
 
 	return true, nil
