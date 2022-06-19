@@ -4,6 +4,8 @@ import (
 	"github.com/project-flogo/core/activity"
 	"github.com/golang-jwt/jwt/v4"
 	"encoding/json"
+	"fmt"
+	"time"
 )
 
 func init() {
@@ -47,7 +49,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	
 	case "Sign":
 		{
-			claims := jwt.MapClaims{}
+			claims := jwt.MapClaims{"exp":time.Now().Unix() + 60}
 			var header map[string]interface{}
 
 			// take the payload (claims) string and unmarshall it into a byte slice
@@ -56,11 +58,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 
+			fmt.Println(claims)
+
 			// Take the header string and unmarshall
 			if err := json.Unmarshal([]byte(input.Header), &header); err != nil {
 				ctx.Logger().Info("Invalid Header: ", err)
 				return false, err
 			}
+
 
 			// get the alg value from the header
 			alg := header["alg"].(string)

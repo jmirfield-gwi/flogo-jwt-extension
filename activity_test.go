@@ -24,8 +24,7 @@ func TestEval(t *testing.T) {
 	tc.SetInput("payload", `{
 		"iss": "3MVG99OxTyEMCQ3gNp2PjkqeZKxnmAiG1xV4oHh9AKL_rSK.BoSVPGZHQukXnVjzRgSuQqGn75NL7yfkQcyy7", 
 		"sub": "my@email.com", 
-		"aud": "https://login.salesforce.com", 
-		"exp": "1333685628"
+		"aud": "https://login.salesforce.com"
 	}`)
 	tc.SetInput("secret", `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA4f5wg5l2hKsTeNem/V41fGnJm6gOdrj8ym3rFkEU/wT8RDtn
