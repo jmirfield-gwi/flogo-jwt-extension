@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"testing"
-
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
@@ -61,6 +60,7 @@ CKuHRG+AP579dncdUnOMvfXOtkdM4vk0+hWASBQzM9xzVcztCa+koAugjVaLS9A+
 	assert.Nil(t, err)
 
 	output := &Output{}
+
 	err = tc.GetOutputObject(output)
 	assert.Nil(t, err)
 }

@@ -92,7 +92,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 			// Sign and get the complete encoded token as a string using the secret
 			tokenString, err := token.SignedString(key)
-
+			fmt.Println(tokenString)
 			if err == nil {
 				ctx.Logger().Debug("Token String created", tokenString)
 				output.Token = tokenString
