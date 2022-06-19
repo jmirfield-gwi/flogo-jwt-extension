@@ -8,15 +8,18 @@
     "inputs": [
         {
             "name": "header",
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         {
             "name": "payload",
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         {
             "name": "secret",
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         {
             "name": "mode",
@@ -32,7 +35,8 @@
         },
         {
             "name": "algorithm",
-            "type": "string"
+            "type": "string",
+            "required": true
         }
     ],
     "outputs": [
