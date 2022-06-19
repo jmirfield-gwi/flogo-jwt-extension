@@ -94,7 +94,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			tokenString, err := token.SignedString(key)
 			fmt.Println(tokenString)
 			if err == nil {
-				ctx.Logger().Debug("Token String created", tokenString)
+				ctx.Logger().Info("Token String created", tokenString)
 				output.Token = tokenString
 				ctx.SetOutputObject(output)
 				return true, nil
